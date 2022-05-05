@@ -1,4 +1,4 @@
-<template><div>User Profile</div></template>
+<template></template>
 
 <script>
 export default {};

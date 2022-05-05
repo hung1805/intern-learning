@@ -3,17 +3,15 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './assets/styles/index.css';
-import { onAuthStateChanged } from '@firebase/auth';
-import { auth } from '@/firebase/firebaseConfig.js';
+import i18n from './i18n';
+import VuePapaParse from 'vue-papa-parse';
 
+Vue.use(VuePapaParse);
 Vue.config.productionTip = false;
 
-// const unsub = onAuthStateChanged(auth, (user) => {
-//   console.log(user);
-//   store.dispatch('FetchUserData', user.uid);
-// });
 new Vue({
   router,
   store,
+  i18n,
   render: (h) => h(App),
 }).$mount('#app');

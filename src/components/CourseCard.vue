@@ -10,7 +10,7 @@
       natus ab nemo fugit odit.
     </p>
     <button class="mt-2 px-4 py-2 text-blue-100 bg-blue-800 rounded-md" @click="registerCourse(course)">
-      Get This Course
+      {{ $t('get-course') }}
     </button>
   </div>
 </template>
@@ -20,13 +20,17 @@ export default {
   props: ['course'],
   methods: {
     registerCourse(course) {
-      if (!this.$store.state.user) {
-        this.$router.push('/login');
+      if (!this.$store.state.user.accessToken) {
+        this.$router.replace('/login');
       } else {
-        if (this.$store.state.courses.indexOf(course.id) > -1) {
+        const arr = this.$store.state.courses.filter((item) => item.id === course.id);
+        console.log(arr);
+        if (arr.length > 0) {
           alert('You have register this course');
         } else {
           this.$store.dispatch('RegisterCourse', { course, userId: this.$store.state.user.uid });
+          alert(`Successfully get course ${course.topic}`);
+          this.$router.push(`courses/${course.id}`);
         }
       }
     },

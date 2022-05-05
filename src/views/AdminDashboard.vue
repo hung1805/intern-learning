@@ -1,5 +1,5 @@
 <template>
-  <section>User's Course and All Courses</section>
+  <div></div>
 </template>
 
 <script>

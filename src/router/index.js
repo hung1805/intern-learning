@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import HomeView from '../views/HomeView.vue';
+import store from '@/store/index.js';
 
 Vue.use(VueRouter);
 
@@ -13,18 +14,19 @@ const routes = [
   {
     path: '/lession',
     name: 'lession',
-    component: () => import('../views/UserLession.vue'),
+    component: () => import('../views/Course.vue'),
+    // beforeEnter: (to, from, next) => {
+    //   if (!store.state.user.accessToken) {
+    //     next({ name: 'login' });
+    //   } else next();
+    // },
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('../views/LoginPage.vue'),
   },
-  {
-    path: '/courses',
-    name: 'courses',
-    component: () => import('../views/TheCourses.vue'),
-  },
+
   {
     path: '/register',
     name: 'register',
@@ -34,22 +36,50 @@ const routes = [
     path: '/user/courses',
     name: 'user-course',
     component: () => import('../views/UserCourses.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!store.state.user.accessToken) {
+        alert('You have to login before seeing your courses');
+        next({ name: 'login' });
+      } else next();
+    },
   },
   { path: '/all-courses', name: 'all-courses', component: () => import('../views/AllCourses.vue') },
+
   {
-    path: '/profile',
-    name: 'profile',
-    component: () => import('../views/UserProfile.vue'),
-  },
-  {
-    path: '/setting',
-    name: 'setting',
+    path: '/settings',
+    name: 'settings',
     component: () => import('../views/UserSetting.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!store.state.user.accessToken) {
+        alert('You have to login before changing your accout settings');
+        next({ name: 'login' });
+      } else next();
+    },
   },
   {
     path: '/courses/:id',
     name: 'courses/:id',
     component: () => import('../views/Course.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!store.state.user.accessToken) {
+        next({ name: 'login' });
+      } else next();
+    },
+  },
+  {
+    path: '/user/words',
+    name: 'user-words',
+    component: () => import('../views/UserWords.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!store.state.user.accessToken) {
+        next({ name: 'login' });
+      } else next();
+    },
+  },
+  {
+    path: '/importcsv',
+    name: 'import-csv',
+    component: () => import('../components/UploadFileCsv.vue'),
   },
 ];
 
