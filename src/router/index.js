@@ -14,7 +14,7 @@ const routes = [
   {
     path: '/lession',
     name: 'lession',
-    component: () => import('../views/Course.vue'),
+    component: () => import('../views/courses/Course.vue'),
     // beforeEnter: (to, from, next) => {
     //   if (!store.state.user.accessToken) {
     //     next({ name: 'login' });
@@ -35,7 +35,7 @@ const routes = [
   {
     path: '/user/courses',
     name: 'user-course',
-    component: () => import('../views/UserCourses.vue'),
+    component: () => import('../views/user/UserCourses.vue'),
     beforeEnter: (to, from, next) => {
       if (!store.state.user.accessToken) {
         alert('You have to login before seeing your courses');
@@ -43,12 +43,12 @@ const routes = [
       } else next();
     },
   },
-  { path: '/all-courses', name: 'all-courses', component: () => import('../views/AllCourses.vue') },
+  { path: '/all-courses', name: 'all-courses', component: () => import('../views/courses/AllCourses.vue') },
 
   {
     path: '/settings',
     name: 'settings',
-    component: () => import('../views/UserSetting.vue'),
+    component: () => import('../views/user/UserSetting.vue'),
     beforeEnter: (to, from, next) => {
       if (!store.state.user.accessToken) {
         alert('You have to login before changing your accout settings');
@@ -59,7 +59,7 @@ const routes = [
   {
     path: '/courses/:id',
     name: 'courses/:id',
-    component: () => import('../views/Course.vue'),
+    component: () => import('../views/courses/Course.vue'),
     beforeEnter: (to, from, next) => {
       if (!store.state.user.accessToken) {
         next({ name: 'login' });
@@ -69,7 +69,7 @@ const routes = [
   {
     path: '/user/words',
     name: 'user-words',
-    component: () => import('../views/UserWords.vue'),
+    component: () => import('../views/user/UserWords.vue'),
     beforeEnter: (to, from, next) => {
       if (!store.state.user.accessToken) {
         next({ name: 'login' });

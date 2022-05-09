@@ -5,9 +5,8 @@
         {{ course.topic }}
       </h5>
     </router-link>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum adipisci ipsam doloribus voluptates placeat ipsum
-      natus ab nemo fugit odit.
+    <p class="my-3">
+      {{ course.description }}
     </p>
     <button class="mt-2 px-4 py-2 text-blue-100 bg-blue-800 rounded-md" @click="registerCourse(course)">
       {{ $t('get-course') }}

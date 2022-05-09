@@ -7,7 +7,7 @@
       <input
         type="text"
         id="name"
-        :value="user.name"
+        :value="userName"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         disabled
       />
@@ -16,39 +16,52 @@
         type="text"
         id="name"
         v-model.trim="newName"
+        @focus="clearError"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         placeholder="Ex: John Senna"
       />
-      <p v-if="nameValidator" class="text-xs text-red-700">{{ nameValidator }}</p>
-      <button type="submit" class="mt-6 px-4 py-2 text-blue-100 bg-blue-800 rounded-md">{{ $t('change-name') }}</button>
+      <p v-if="message" class="text-xs text-red-700 mt-2">{{ message }}</p>
+      <pri-btn type="submit" class="mt-4">{{ $t('change-name') }}</pri-btn>
     </form>
   </div>
 </template>
 
 <script>
+import PriButton from '@/components/common/PriButton.vue';
 export default {
+  components: {
+    'pri-btn': PriButton,
+  },
   data() {
     return {
       newName: '',
-      nameValidator: '',
+      message: null,
     };
   },
   methods: {
+    validateName(value) {
+      if (value === '') {
+        this.message = 'Please enter your name';
+      }
+      if (value === this.userName) {
+        this.message = 'The Same Name';
+      }
+    },
     handleChangeName() {
-      if (this.newName === '') {
-        this.nameValidator = 'Please enter valid name';
+      this.validateName(this.newName);
+      if (!this.message) {
+        this.$store.dispatch('ChangeName', { name: this.newName, userId: this.$store.state.user.uid });
+        this.newName = '';
       }
-      if (this.$store.state.user.name == this.newName) {
-        this.nameValidator = 'The same name';
-      }
-      this.$store.dispatch('ChangeName', { name: this.newName, userId: this.$store.state.user.uid });
-      alert('Change Name Successfully');
-      this.newName = '';
+    },
+    clearError() {
+      this.message = null;
     },
   },
+
   computed: {
-    user() {
-      return this.$store.state.user;
+    userName() {
+      return this.$store.state.user.name;
     },
   },
 };

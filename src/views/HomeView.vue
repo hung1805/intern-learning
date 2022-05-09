@@ -3,13 +3,12 @@
     <div class="flex-1 mr-2">
       <h1 class="text-5xl font-bold leading-snug">{{ $t('welcomeMessage') }}</h1>
       <p class="py-6 text-xl font-semibold text-blue-800">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem impedit enim libero laudantium error delectus
-        possimus necessitatibus facere? Architecto, ipsam.
+        {{ $t('websiteDesc') }}
       </p>
-      <button class="px-4 py-2 text-blue-100 bg-blue-800 rounded-md mr-4">
+      <pri-btn class="mr-4">
         <router-link :to="{ path: '/all-courses' }">{{ $t('get-start') }}</router-link>
-      </button>
-      <button class="px-4 py-2 text-blue-100 bg-blue-800 rounded-md">{{ $t('more-info') }}</button>
+      </pri-btn>
+      <pri-btn class="px-4 py-2 text-blue-100 bg-blue-800 rounded-md">{{ $t('more-info') }}</pri-btn>
     </div>
     <div class="flex-1">
       <svg
@@ -222,5 +221,10 @@
 </template>
 
 <script>
-export default {};
+import PriButton from '@/components/common/PriButton.vue';
+export default {
+  components: {
+    'pri-btn': PriButton,
+  },
+};
 </script>

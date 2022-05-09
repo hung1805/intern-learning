@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 px-40 flex h-96">
+  <div class="mt-4 px-40 flex min-h-full">
     <aside class="border-2 border-t-4 border-green-700 w-1/4 bg-gray-100 mr-8" aria-label="Sidebar">
       <div class="">
         <ul>
@@ -66,9 +66,9 @@
 </template>
 
 <script>
-import ChangeName from '@/components/ChangeName.vue';
-import ChangePassword from '@/components/ChangePassword.vue';
-import ChangeAvatar from '@/components/ChangeAvatar.vue';
+import ChangeName from '@/components/user/ChangeName.vue';
+import ChangePassword from '@/components/user/ChangePassword.vue';
+import ChangeAvatar from '@/components/user/ChangeAvatar.vue';
 export default {
   components: {
     'change-name': ChangeName,

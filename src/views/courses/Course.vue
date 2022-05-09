@@ -53,7 +53,7 @@
       <div v-if="showAnswer" class="mx-12 my-6 px-4 py-6 bg-green-500">
         {{ $t('correct-ans') }} : {{ course.lessions[progress].trueAnswer }}
       </div>
-      <div v-if="showResult">
+      <div v-if="showResult" class="text-center">
         <table class="mx-auto">
           <thead class="text-xs text-blue-700 uppercase bg-gray-50">
             <tr>
@@ -74,6 +74,7 @@
             </tr>
           </tbody>
         </table>
+        <p class="mt-4">Your correct answers is: {{ caculateResult() }} / {{ answers.length }}.</p>
         <div class="mt-4 flex justify-center">
           <button class="mr-4 px-4 py-2 text-blue-100 bg-green-800 rounded-md" @click="restartLessions">
             Restart Lessions
@@ -132,6 +133,15 @@ export default {
       await this.loadCourse();
       this.progress = 0;
       this.showResult = false;
+    },
+    caculateResult() {
+      let count = 0;
+      this.result.forEach((item, index) => {
+        if (item === this.answers[index]) {
+          count++;
+        }
+      });
+      return count;
     },
     handleSaveLessions() {
       let arr = [];

@@ -17,11 +17,14 @@ export default new Vuex.Store({
       role: null,
       password: null,
     },
-    userError: null,
     courses: [],
-    courseError: null,
+    message: {
+      content: null,
+      type: null,
+    },
   },
   actions: {
+    //Login Action
     async LogIn(context, { email, password }) {
       const res = await signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => userCredential.user)
@@ -38,11 +41,14 @@ export default new Vuex.Store({
           context.commit('setUserRole', data.role);
           context.commit('setUserPassword', data.password);
           context.commit('setCourses', docSnap.data().courses);
+          context.commit('setMessage', { content: `Welcome ${this.state.user.name}`, type: 'success' });
         } else {
-          return { message: 'No data' };
+          return { message: 'No data', type: 'error' };
         }
-      } else context.commit('setUserError', res);
+      } else context.commit('setMesssage', res);
     },
+
+    //Register Action
     async Register(context, { name, email, password }) {
       const res = await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => userCredential.user)
@@ -62,8 +68,10 @@ export default new Vuex.Store({
           role: 'user',
           courses: [],
         });
-      } else context.commit('setUserError', res);
+      } else context.commit('setMessage', { content: res, type: 'error' });
     },
+
+    //Logout Action
     async LogOut(context) {
       await signOut(auth);
       context.commit('setAccessToken', null);
@@ -75,12 +83,17 @@ export default new Vuex.Store({
       context.commit('setCourses', []);
       context.commit('setUserPassword', null);
     },
+
+    //User Register Course Action
     async RegisterCourse(context, { course, userId }) {
       const docRef = doc(db, 'users', userId);
 
       await updateDoc(docRef, { courses: arrayUnion({ id: course.id }) });
       context.commit('setRegistedCourse', { id: course.id });
+      context.commit('setMessage', { type: 'success', content: 'Registered this course' });
     },
+
+    //User Save Course Result Action
     async SaveCourseDetail(context, { arr, id }) {
       const ind = this.state.courses.findIndex((item) => item.id === id);
       const courses = [...this.state.courses];
@@ -89,33 +102,46 @@ export default new Vuex.Store({
       await updateDoc(docRef, { courses })
         .then(() => {
           context.commit('setCourseDetail', courses);
+          context.commit('setMessage', { type: 'success', content: 'Saved your course' });
         })
-        .catch((error) => console.log(error));
+        .catch((error) => context.commit('setMessage', { content: error, type: 'error' }));
     },
+
+    //User Change Name Action
     async ChangeName(context, { name, userId }) {
       const docRef = doc(db, 'users', userId);
       await updateDoc(docRef, { name });
       context.commit('setUserName', name);
+      context.commit('setMessage', { content: 'Change Name Successfully', type: 'success' });
     },
-    async ChangePassword(context, { password }) {
+
+    //User Change Password Action
+    async ChangePassword(context, { password, id }) {
       const user = auth.currentUser;
       await updatePassword(user, password)
-        .then(() => {
-          alert('Updated Password Successfully');
+        .then(async () => {
+          await updateDoc(doc(db, 'users', id), {
+            password,
+          });
+          context.commit('setMessage', { content: 'Change Password Successfully', type: 'success' });
         })
         .catch((error) => {
-          alert(error);
+          context.commit('setMessage', { content: error, type: 'error' });
         });
     },
+
+    //User Change Avatar URL Action
     async ChangeAvatar(context, { url, userId }) {
       const docRef = doc(db, 'users', userId);
       await updateDoc(docRef, { photoURL: url })
         .then(() => {
           context.commit('setUserPhotoURL', url);
-          alert('Change Avatar Successfully');
+          context.commit('setMessage', { content: 'Change Avatar Successfully', type: 'success' });
         })
-        .catch((error) => alert(error));
+        .catch((error) => context.commit('setMessage', { content: error, type: 'error' }));
     },
+
+    //Admin Upload Course Action
     async UploadCourse(context, { topic, data, id }) {
       console.log(data, topic);
       await setDoc(collection(db, 'courses', 'ui8aLQQWxLRlwX9d6Wae'), {
@@ -125,6 +151,7 @@ export default new Vuex.Store({
       });
     },
   },
+
   mutations: {
     initialiseStore(state, payload) {
       const user = localStorage.getItem('vuex');
@@ -172,7 +199,12 @@ export default new Vuex.Store({
     },
     setCourseDetail(state, payload) {
       state.courses = payload;
-      alert('Successfully Save Detail');
+    },
+    setMessage(state, payload) {
+      state.message = {
+        content: payload.content,
+        type: payload.type,
+      };
     },
   },
   getters: {

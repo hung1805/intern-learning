@@ -31,14 +31,18 @@
         >
           <ul class="py-1 text-sm" aria-labelledby="dropdownDefault">
             <li>
-              <router-link :to="{ path: '/user/courses' }" class="block px-4 py-2">{{ $t('my-courses') }}</router-link>
-            </li>
-            <li>
               <router-link :to="{ path: '/all-courses' }" class="block px-4 py-2">{{ $t('all-courses') }}</router-link>
             </li>
-            <li>
-              <router-link :to="{ path: '/user/words' }" class="block px-4 py-2">{{ $t('words') }}</router-link>
-            </li>
+            <template v-if="userId">
+              <li>
+                <router-link :to="{ path: '/user/courses' }" class="block px-4 py-2">{{
+                  $t('my-courses')
+                }}</router-link>
+              </li>
+              <li>
+                <router-link :to="{ path: '/user/words' }" class="block px-4 py-2">{{ $t('words') }}</router-link>
+              </li>
+            </template>
           </ul>
         </div>
       </span>
@@ -76,26 +80,27 @@
           class="z-10 bg-white divide-y divide-gray-100 rounded shadow w-40 absolute right-0 top-full"
         >
           <ul class="py-1 text-sm" aria-labelledby="dropdownDefault">
-            <li>
+            <li class="border-b-2">
               <router-link :to="{ path: '/settings' }" class="block px-4 py-2">{{ $t('settings') }}</router-link>
             </li>
+            <li><span class="px-4 py-2 block" @click="handleSignOut">Sign Out</span></li>
           </ul>
         </div>
       </span>
       <div class="flex items-center space-x-2">
-        <button class="px-4 py-2 text-blue-100 bg-blue-800 rounded-md" v-if="!userId">
+        <pri-btn v-if="!userId">
           <router-link :to="{ path: '/login' }">{{ $t('login') }}</router-link>
-        </button>
-        <button class="px-4 py-2 text-blue-100 bg-blue-800 rounded-md" v-if="!userId">
+        </pri-btn>
+        <pri-btn v-if="!userId">
           <router-link :to="{ path: '/register' }">{{ $t('register') }}</router-link>
-        </button>
-        <button class="px-4 py-2 text-blue-100 bg-blue-800 rounded-md" @click="handleSignOut" v-if="userId">
-          {{ $t('logout') }}
-        </button>
+        </pri-btn>
       </div>
       <div class="">
-        <select v-model="$i18n.locale" class="px-2 py-2 text-xs text-blue-100 bg-blue-800 rounded-md cursor-pointer">
-          <option v-for="item in languageArray" :key="item.short" :value="item.short" class="text-xs">
+        <select
+          v-model="$i18n.locale"
+          class="px-2 py-2 text-base text-center text-blue-100 bg-blue-800 rounded-md cursor-pointer"
+        >
+          <option v-for="item in languageArray" :key="item.shorthand" :value="item.shorthand" class="text-xs">
             {{ item.title }}
           </option>
         </select>
@@ -105,14 +110,18 @@
 </template>
 
 <script>
+import PriButton from '@/components/common/PriButton.vue';
 export default {
+  components: {
+    'pri-btn': PriButton,
+  },
   data() {
     return {
       showCourseDropdown: false,
       showSettingDropdown: false,
       languageArray: [
-        { short: 'en', title: 'English' },
-        { short: 'vi', title: 'Vietnamese' },
+        { shorthand: 'en', title: 'English' },
+        { shorthand: 'vi', title: 'Tiếng Việt' },
       ],
     };
   },
@@ -142,4 +151,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+select {
+  /* for Firefox */
+  -moz-appearance: none;
+  /* for Chrome */
+  -webkit-appearance: none;
+}
+
+/* For IE10 */
+select::-ms-expand {
+  display: none;
+}
+</style>

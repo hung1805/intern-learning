@@ -7,10 +7,12 @@
 <script>
 import { db } from '@/firebase/firebaseConfig';
 import { getDocs, collection } from '@firebase/firestore';
-import CourseCard from '@/components/CourseCard.vue';
+import CourseCard from '@/components/course/CourseCard.vue';
+import PriButton from '@/components/common/PriButton.vue';
 export default {
   components: {
     'course-card': CourseCard,
+    'pri-btn': PriButton,
   },
   data() {
     return {

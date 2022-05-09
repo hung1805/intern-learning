@@ -10,9 +10,9 @@
         placeholder="Ex: https://images.unsplash.com/photo-1651555729419-7543b492fe76?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=526&q=80"
       />
       <p v-if="validator" class="text-xs text-red-700 mt-2">{{ validator }}</p>
-      <button type="submit" class="mt-6 px-4 py-2 text-blue-100 bg-blue-800 rounded-md">
+      <pri-btn type="submit" class="mt-6">
         {{ $t('change-avatar') }}
-      </button>
+      </pri-btn>
     </form>
     <div class="preview" v-if="url">
       <h4 class="ml-4 block mb-2 text-sm font-medium text-gray-900 mt-2">{{ $t('avtar-preview') }}</h4>
@@ -23,7 +23,11 @@
 </template>
 
 <script>
+import PriButton from '@/components/common/PriButton.vue';
 export default {
+  components: {
+    'pri-btn': PriButton,
+  },
   data() {
     return {
       url: '',
